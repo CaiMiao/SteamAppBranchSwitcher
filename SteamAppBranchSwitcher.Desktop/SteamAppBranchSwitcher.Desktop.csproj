@@ -16,6 +16,10 @@
   </ItemGroup>
 
 <PropertyGroup>
+  <UseAppHost>true</UseAppHost>
+</PropertyGroup>
+
+<PropertyGroup>
     <PublishAot>true</PublishAot>
     <!-- Recommended Avalonia trimming settings for Native AOT -->
     <BuiltInComInteropSupport>false</BuiltInComInteropSupport>
