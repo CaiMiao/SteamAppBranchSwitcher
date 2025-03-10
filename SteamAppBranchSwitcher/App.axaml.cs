@@ -9,6 +9,8 @@ namespace SteamAppBranchSwitcher;
 
 public partial class App : Application
 {
+    public static bool IsSteamApiInitialized { get; private set; }
+
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -16,6 +18,11 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
+        (IsSteamApiInitialized, string m) = Common.SteamApiInit();
+        if (!IsSteamApiInitialized)
+        {
+            _ = Common.AlertBoxAsync(m);
+        } else
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.MainWindow = new MainWindow
