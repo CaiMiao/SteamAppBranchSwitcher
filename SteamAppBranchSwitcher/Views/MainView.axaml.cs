@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
-using System;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Steamworks;
-using System.Threading.Tasks;
-using Avalonia;
 
 namespace SteamAppBranchSwitcher.Views;
 
@@ -39,7 +36,7 @@ public partial class MainView : UserControl
 
     public void SwitchBranch(object sender, RoutedEventArgs args)
     {
-        if (App.IsSteamApiInitialized && SteamApps.SetActiveBeta((string)listbox.SelectedItem))
+        if (App.IsSteamApiInitialized && SteamApps.SetActiveBeta((string?)listbox.SelectedItem ?? string.Empty))
         {
             if (!SteamApps.GetCurrentBetaName(out string s, 128)) s = "(null)";
             switch_message.Text = $"Switch branch OK.\nCurrent branch: {s}";
