@@ -17,9 +17,10 @@
   <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
   -->
 	<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10">
-		<TextBlock>Select Branch</TextBlock>
+		<TextBlock HorizontalAlignment="Center">Select Branch</TextBlock>
 		<ListBox SelectionMode="Single,AlwaysSelected" Name="listbox"></ListBox>
 		<Button HorizontalAlignment="Center" Click="SwitchBranch">Switch</Button>
-		<TextBlock Name="switch_message" HorizontalAlignment="Center"></TextBlock>
+		<TextBlock Name="switch_message" HorizontalAlignment="Center" xml:space="preserve">
+</TextBlock>
 	</StackPanel>
 </UserControl>

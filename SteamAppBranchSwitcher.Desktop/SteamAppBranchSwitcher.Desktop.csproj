@@ -35,4 +35,19 @@
   <ItemGroup>
     <ProjectReference Include="..\SteamAppBranchSwitcher\SteamAppBranchSwitcher.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="libsteam_api.dylib">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="steam_api64.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="steam_api.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="steam_appid.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

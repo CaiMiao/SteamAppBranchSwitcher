@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Steamworks;
@@ -7,39 +8,53 @@ namespace SteamAppBranchSwitcher.Views;
 
 public partial class MainView : UserControl
 {
+    private static List<string> lBetaNames = [];
+    private static List<string> lBetaNamesDescs = [];
+
     public MainView()
     {
-        List<string> lBetaNames = [];
         if (App.IsSteamApiInitialized)
         {
             int nGotBetas = SteamApps.GetNumBetas(out _, out _);
-
             for (int i = 0; i < nGotBetas; ++i)
             {
-                string name;
-                string desc;
-                if (SteamApps.GetBetaInfo(i, out _, out _, out name, 128, out desc, 1024))
+                if (SteamApps.GetBetaInfo(i, out _, out _, out string name, 128, out string desc, 1024))
                 {
                     lBetaNames.Add(name);
+                    if (desc != string.Empty)
+                        lBetaNamesDescs.Add($"{name} - {desc}");
+                    else
+                        lBetaNamesDescs.Add(name);
                 }
             }
         }
 
-        //at very least we have public
-        if (lBetaNames == new List<string>())
-            lBetaNames.Add("nothing la");
+        // in normal circumstances we have public at least, but here we indicate nothing when nothing
+        if (lBetaNames.Count == 0)
+        {
+            var listNothing = new List<string> { "nothing la" };
+            lBetaNames = listNothing;
+            lBetaNamesDescs = listNothing;
+        }
 
         InitializeComponent();
 
-        listbox.ItemsSource = lBetaNames.ToArray();
+        listbox.ItemsSource = lBetaNamesDescs.ToArray();
     }
 
     public void SwitchBranch(object sender, RoutedEventArgs args)
     {
-        if (App.IsSteamApiInitialized && SteamApps.SetActiveBeta((string?)listbox.SelectedItem ?? string.Empty))
+        try
         {
-            if (!SteamApps.GetCurrentBetaName(out string s, 128)) s = "(null)";
-            switch_message.Text = $"Switch branch OK.\nCurrent branch: {s}";
+            if (App.IsSteamApiInitialized && SteamApps.SetActiveBeta(lBetaNames[listbox.SelectedIndex]))
+            {
+                if (!SteamApps.GetCurrentBetaName(out string s, 128)) s = "(null)";
+                switch_message.Text = $"Switch branch OK.\nCurrent branch: {s}";
+            }
+        }
+        catch (Exception e)
+        {
+            _ = Common.AlertBoxAsync(e.Message);
         }
     }
 }
